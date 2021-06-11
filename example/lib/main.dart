@@ -28,10 +28,17 @@ class _MyAppState extends State<MyApp> {
             "index: $_index",
             style: TextStyle(
               fontSize: 52,
+              
             ),
           ),
         ),
         bottomNavigationBar: FloatingNavbar(
+          selectedTextStyle: TextStyle(
+            fontFamily: "example/assets/fonts/gotham_narrow_bold.otf",
+          ),
+          unselectedTextStyle: TextStyle(
+            fontFamily: "example/assets/fonts/gotham_narrow_light.otf",
+          ),
           onTap: (int val) => setState(() => _index = val),
           currentIndex: _index,
           items: [

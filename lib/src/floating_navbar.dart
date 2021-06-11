@@ -12,6 +12,8 @@ class FloatingNavbar extends StatefulWidget {
   final Color? unselectedItemColor;
   final Color? backgroundColor;
   final double? fontSize;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
   final double? iconSize;
   final double? itemBorderRadius;
   final double? borderRadius;
@@ -32,6 +34,8 @@ class FloatingNavbar extends StatefulWidget {
     this.selectedItemColor = Colors.black,
     this.iconSize = 24.0,
     this.fontSize = 11.0,
+    this.selectedTextStyle,
+    this.unselectedTextStyle,
     this.borderRadius = 8,
     this.itemBorderRadius = 8,
     this.unselectedItemColor = Colors.white,
@@ -49,6 +53,8 @@ class FloatingNavbar extends StatefulWidget {
               selectedItemColor: selectedItemColor,
               borderRadius: borderRadius,
               fontSize: fontSize,
+              selectedTextStyle: selectedTextStyle,
+              unselectedTextStyle: unselectedTextStyle,
               backgroundColor: backgroundColor,
               currentIndex: currentIndex,
               iconSize: iconSize,
@@ -88,9 +94,11 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   mainAxisSize: MainAxisSize.max,
-                  children: items.map((f) {
-                    return widget.itemBuilder!(context, f);
-                  }).toList(),
+                  children: items.map(
+                    (f) {
+                      return widget.itemBuilder!(context, f);
+                    },
+                  ).toList(),
                 ),
               ),
             ),
@@ -110,6 +118,8 @@ ItemBuilder _defaultItemBuilder({
   Color? unselectedItemColor,
   Color? backgroundColor,
   double? fontSize,
+  TextStyle? selectedTextStyle,
+  TextStyle? unselectedTextStyle,
   double? iconSize,
   double? itemBorderRadius,
   double? borderRadius,
@@ -122,18 +132,21 @@ ItemBuilder _defaultItemBuilder({
             AnimatedContainer(
               duration: Duration(milliseconds: 300),
               decoration: BoxDecoration(
-                  color: currentIndex == items!.indexOf(item)
-                      ? selectedBackgroundColor
-                      : backgroundColor,
-                  borderRadius: BorderRadius.circular(itemBorderRadius!)),
+                color: currentIndex == items!.indexOf(item)
+                    ? selectedBackgroundColor
+                    : backgroundColor,
+                borderRadius: BorderRadius.circular(
+                  itemBorderRadius!,
+                ),
+              ),
               child: InkWell(
                 onTap: () {
-                  onTap!(items.indexOf(item));
+                  onTap!(
+                    items.indexOf(item),
+                  );
                 },
                 borderRadius: BorderRadius.circular(8),
                 child: Container(
-                  //max-width for each item
-                  //24 is the padding from left and right
                   width: MediaQuery.of(context).size.width *
                           (100 / (items.length * 100)) -
                       24,
@@ -152,12 +165,9 @@ ItemBuilder _defaultItemBuilder({
                       ),
                       Text(
                         '${item.title}',
-                        style: TextStyle(
-                          color: currentIndex == items.indexOf(item)
-                              ? selectedItemColor
-                              : unselectedItemColor,
-                          fontSize: fontSize,
-                        ),
+                        style: currentIndex == items.indexOf(item)
+                            ? selectedTextStyle
+                            : unselectedTextStyle,
                       ),
                     ],
                   ),
